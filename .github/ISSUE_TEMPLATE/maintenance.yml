@@ -1,0 +1,316 @@
+name: 유지보수 작업
+description: 기존 기능·문서·검증 체계를 안전하게 유지보수합니다.
+title: "[maintenance] "
+labels:
+  - maintenance
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 유지보수 작업 계약
+
+        이 양식은 작업 시작 전에 범위와 검증 기준을 합의하기 위한 것입니다.
+        비밀번호, 토큰, 세션 시크릿, API 키, 개인정보를 입력하지 마세요.
+        원본 문서 간 충돌이나 판단이 필요한 내용은 `NEEDS_HUMAN`으로 표시하세요.
+
+  - type: textarea
+    id: background
+    attributes:
+      label: 배경
+      description: 왜 이 유지보수 작업이 필요한지, 어떤 문제를 해결하는지 작성하세요.
+      placeholder: 현재 상황과 작업이 필요한 이유를 작성하세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: change
+    attributes:
+      label: 변경할 내용
+      description: 무엇을 수정할지 구체적으로 작성하세요. 관련 경로와 재현 절차가 있으면 포함하세요.
+      placeholder: |
+        - 대상 화면·기능·문서·스크립트:
+        - 현재 동작:
+        - 원하는 동작:
+        - 재현 절차 또는 관련 경로:
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: 유지보수 유형
+      description: 가장 가까운 유형을 선택하세요.
+      options:
+        - 버그 또는 회귀
+        - 검증·QA 공백
+        - 의존성·도구
+        - 문서·프로세스
+        - 성능·신뢰성
+        - 리팩터링·내부 정리
+        - 기타
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-area
+    attributes:
+      label: 영향 범위
+      description: 영향을 받는 화면·워크플로·파일·패키지·스크립트를 작성하세요.
+      placeholder: |
+        - 영역:
+        - 파일 경로:
+        - 관련 화면 또는 명령:
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 원본 문서 참조
+      description: 관련 원본의 경로와 절을 작성하세요. 해당 없음이면 '해당 없음'이라고 쓰세요.
+      placeholder: |
+        - 요구사항: docs/01-requirements.md §
+        - 아키텍처: docs/06-architecture.md §
+        - SSOT·검증: docs/harness/01-SSOT.md § / docs/harness/02-verification.md §
+    validations:
+      required: true
+
+  - type: textarea
+    id: completion
+    attributes:
+      label: 종료 조건
+      description: |
+        작업을 실행한 뒤 참·거짓으로 판정할 수 있도록 각 조건에 기준·수치·기대 결과를 포함하세요.
+        '정상 동작', '문제 없음', '품질 향상'처럼 측정 방법이나 통과 기준이 없는 표현만 쓰지 마세요.
+
+        되는 예: `npm test 실행 시 테스트 19개가 모두 통과하고 종료 코드가 0이어야 한다.`
+        되는 예: `390px 뷰포트에서 홈 화면을 열었을 때 가로 스크롤 폭이 0px이어야 한다.`
+        안 되는 예: `테스트를 잘 통과하도록 수정한다.`
+        안 되는 예: `모바일에서 보기 좋게 만든다.`
+      placeholder: |
+        - [ ] 기준: 어떤 명령·화면·입력을 확인하는가
+              수치: 몇 개·몇 px·몇 초·어떤 상태인가
+              기대 결과: 참일 때 관찰되는 정확한 결과
+        - [ ] 기준: `npm test` 실행
+              수치: 실패 테스트 0개, 종료 코드 0
+              기대 결과: 전체 테스트 통과
+        - [ ] 기준: 390px 뷰포트에서 홈 화면 확인
+              수치: 가로 스크롤 폭 0px
+              기대 결과: 좌우 스크롤 없이 화면이 표시됨
+    validations:
+      required: true
+
+  - type: textarea
+    id: machine-verification
+    attributes:
+      label: 기계 검증
+      description: |
+        각 종료 조건을 실행으로 참·거짓 판정할 수 있는 검증 방법을 작성하세요.
+        Issue 번호가 부여되면 종료 조건을 검증하는 테스트를 반드시
+        `tests/issues/issue-{Issue 번호}-{기능명}.test.ts`에 추가하세요.
+        `{Issue 번호}`는 실제 Issue 번호(예: `42`), `{기능명}`은 영문 소문자·숫자·하이픈으로 작성합니다.
+        테스트의 각 assertion이 어떤 종료 조건을 검증하는지 주석 또는 테스트 이름으로 드러나야 합니다.
+        기존 검증 기준은 docs/harness/02-verification.md를 참조하세요.
+      placeholder: |
+        - 테스트 파일: `tests/issues/issue-42-stock-summary.test.ts`
+        - 검증 대상: 종료 조건 1, 2
+        - 실행 명령: `npx vitest run tests/issues/issue-42-stock-summary.test.ts`
+        - 각 assertion의 기대 결과: 실패 테스트 0개, 종료 코드 0
+        - 전체 게이트: `npm run verify`
+        - 수동 검증이 필요한 경우 시나리오 ID와 절차:
+        - 결과를 남길 증거 경로:
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### Issue별 검증 테스트 규칙
+
+        - 테스트 경로는 `tests/issues/issue-{Issue 번호}-{기능명}.test.ts` 형식을 사용합니다.
+        - 테스트 파일 하나에서 해당 Issue의 종료 조건을 검증합니다.
+        - 종료 조건마다 최소 하나의 명시적인 assertion을 두고, 테스트 이름에 검증 대상을 적습니다.
+        - 테스트만 통과하고 종료 조건 자체를 충족하지 않으면 작업을 완료로 표시하지 않습니다.
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: 현재 동작 및 근거
+      description: 로그, 테스트 결과, 화면 캡처, CI 실행 링크 등 공개 가능한 근거를 작성하세요. 비밀은 제외하세요.
+      placeholder: 현재 결과와 관련 증거 링크 또는 경로를 작성하세요.
+    validations:
+      required: true
+
+  - type: textarea
+    id: out-of-scope
+    attributes:
+      label: 건드리면 안 되는 것
+      description: 이번 작업에서 변경하지 않을 범위와 보호해야 할 동작을 명시하세요.
+      placeholder: |
+        - 변경하지 않는 파일·기능:
+        - 유지해야 하는 요구사항·불변식:
+        - 범위를 넓히면 안 되는 이유:
+    validations:
+      required: true
+
+  - type: dropdown
+    id: loop-limit
+    attributes:
+      label: 구현 루프 최대 횟수
+      description: |
+        한 번의 루프는 '구현 또는 수정 → Issue별 테스트 실행 → 종료 조건 검증'의 한 사이클입니다.
+        선택한 횟수 안에 모든 종료 조건을 통과하지 못하면 AI는 추가로 반복하지 않고 작업을 중단한 뒤 사람에게 넘깁니다.
+        마지막 실패 결과, 실패한 종료 조건, 실행한 테스트와 남은 판단 사항을 Issue에 기록해야 합니다.
+      options:
+        - 1회 — 1번 시도 후 즉시 사람에게 넘김
+        - 2회 — 최대 2번 시도 후 사람에게 넘김
+        - 3회 — 최대 3번 시도 후 사람에게 넘김 (기본값)
+        - 5회 — 최대 5번 시도 후 사람에게 넘김
+        - 10회 — 최대 10번 시도 후 사람에게 넘김
+      default: 2
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### 구현 루프 제한 규칙
+
+        - 횟수는 무제한 재시도가 아니라 **최대 시도 횟수**입니다.
+        - 각 시도에서는 구현·수정 후 `tests/issues/issue-{Issue 번호}-{기능명}.test.ts`를 실행하고 종료 조건을 다시 판정합니다.
+        - 모든 종료 조건이 통과하면 루프를 종료하고 결과를 기록합니다.
+        - 최대 횟수에 도달했는데 하나라도 통과하지 못하면 AI는 더 이상 코드를 수정하거나 검증을 반복하지 않습니다.
+        - 이 경우 상태를 `보류 — NEEDS_HUMAN`으로 남기고, 실패한 조건·실패 출력·시도 횟수·사람이 결정할 내용을 기록한 뒤 사람에게 인계합니다.
+        - 환경 문제나 원본 충돌로 검증할 수 없는 경우에도 임의로 재시도 횟수를 늘리거나 `PASS`로 처리하지 않습니다.
+
+  - type: dropdown
+    id: source-impact
+    attributes:
+      label: 원본 문서 변경 여부
+      description: 요구사항·아키텍처·SSOT 변경이 필요한지 선택하세요.
+      options:
+        - 원본 문서 변경 없음
+        - 요구사항 원본 변경 필요
+        - 아키텍처 원본 변경 필요
+        - SSOT·검증 원본 변경 필요
+        - 판단 필요 — NEEDS_HUMAN
+    validations:
+      required: true
+
+  - type: textarea
+    id: source-impact-reason
+    attributes:
+      label: 원본 영향 사유
+      description: 위 선택의 근거와 변경이 필요한 경우 영향 범위를 작성하세요.
+      placeholder: 원본 문서 변경 여부를 판단한 근거를 작성하세요.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: conflict
+    attributes:
+      label: 충돌·불확실성
+      description: 원본 문서나 기존 동작과 충돌하는지 선택하세요.
+      options:
+        - 충돌 없음
+        - 충돌 있음 — NEEDS_HUMAN
+        - 정보 부족 — NEEDS_HUMAN
+    validations:
+      required: true
+
+  - type: textarea
+    id: conflict-details
+    attributes:
+      label: 충돌·불확실성 상세
+      description: 충돌이 있거나 판단이 필요하면 관련 원본, 영향 범위, 필요한 결정을 작성하세요.
+      placeholder: 해당 없음이면 '해당 없음'이라고 쓰세요.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: protected-override
+    attributes:
+      label: Protected 정책 우회
+      description: 사람의 명시적 지시가 있을 때만 선택하세요. 선택만으로 우회가 승인되지는 않습니다.
+      options:
+        - label: 이 작업에서 Protected 정책의 우회를 요청합니다.
+          required: false
+
+  - type: textarea
+    id: override-scope
+    attributes:
+      label: 우회 범위와 사람의 지시
+      description: |
+        우회할 정책과 정확한 대상을 작성하세요. CI를 포함해 저장소 어디에서 우회할지,
+        브랜치·커밋 SHA·Issue·PR·workflow run·환경을 특정하고, 사람의 명시적 지시 내용과
+        사유를 그대로 기록하세요. 해당하지 않으면 '우회 없음'이라고 작성하세요.
+      placeholder: |
+        - 우회할 정책·검증 게이트:
+        - 적용 위치: 로컬 / PR / CI / 원격 작업 등
+        - 대상: 브랜치·커밋 SHA·Issue·PR·workflow run·환경
+        - 사람의 명시적 지시:
+        - 사유와 영향:
+        - 일회성 또는 만료 시점:
+    validations:
+      required: true
+
+  - type: textarea
+    id: override-evidence
+    attributes:
+      label: 우회 승인 증거
+      description: 지시한 사람, 지시 시각, 원문 링크 또는 확인 가능한 기록을 작성하세요. 비밀번호·토큰·개인정보는 기록하지 마세요.
+      placeholder: 우회 없음 또는 승인자·시각·Issue/PR/CI 기록 링크
+    validations:
+      required: true
+
+  - type: dropdown
+    id: status
+    attributes:
+      label: 상태
+      options:
+        - 제안
+        - 승인 대기
+        - 진행 중
+        - 검증 대기
+        - 완료
+        - 보류 — NEEDS_HUMAN
+      default: 0
+    validations:
+      required: true
+
+  - type: input
+    id: assignee
+    attributes:
+      label: 담당자
+      description: 담당 GitHub 사용자명을 입력하세요. 미정이면 '미지정'이라고 작성하세요.
+      placeholder: "@username 또는 미지정"
+    validations:
+      required: true
+
+  - type: input
+    id: related-pr
+    attributes:
+      label: 관련 PR
+      description: 관련 Pull Request 번호나 URL을 입력하세요. 없으면 '없음'이라고 작성하세요.
+      placeholder: "#123 또는 없음"
+    validations:
+      required: true
+
+  - type: input
+    id: milestone
+    attributes:
+      label: 목표 마일스톤
+      description: 관련 마일스톤이 없으면 '없음'이라고 작성하세요.
+      placeholder: "M7 또는 없음"
+    validations:
+      required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        ### 작업 종료 전 확인
+
+        - 관련 요구사항·아키텍처 원본을 확인했습니다.
+        - 범위를 벗어난 문서·코드·설정은 변경하지 않았습니다.
+        - 검증 결과와 증거를 기록했습니다.
+        - 실패·미검증·충돌을 `PASS`로 추정하지 않았습니다.

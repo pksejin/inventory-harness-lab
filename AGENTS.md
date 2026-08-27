@@ -20,8 +20,8 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | 시스템 구조·기술 선택·데이터 흐름·구현 제약 | [`docs/06-architecture.md`](docs/06-architecture.md) | 요구사항·QA 문서 전체 |
 | 특정 작업의 범위·상태·완료 조건 | 해당 GitHub Issue | 모든 저장소 문서 |
 | 검증 결과의 기준·판정·증거·실패 분류 | [`docs/harness/02-verification.md`](docs/harness/02-verification.md) §3~§9 | 판정 이후 반복 절차 |
-| 판정 이후 반복·재검증·인계·종료 | [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §3~§8, §10 | 검증 결과의 판정 기준 |
-| 반복 절차의 미결정 정책 확인 | [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §9 | 확정된 반복 규칙 |
+| 판정 이후 반복·PR·CI·재검증·인계·종료 초안 | [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §3~§9, §11 | 검증 결과의 판정 기준 |
+| 반복 절차의 미결정 정책 확인 | [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §10 | 확정된 정책 |
 | 검증 계획·기존 QA 체크리스트 | [`docs/07-plan.md`](docs/07-plan.md) | 새 검증 판정·반복 절차 |
 | 현재 구현 상태·인계·미완료 작업 | [`docs/HANDOVER.md`](docs/HANDOVER.md) | 전체 기획 문서 |
 | 사용자 흐름·화면 행동·시나리오 | [`docs/03-scenarios.md`](docs/03-scenarios.md) | 아키텍처·운영 문서 전체 |
@@ -58,7 +58,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - 원본 간 충돌은 임의로 해소하지 않는다. `NEEDS_HUMAN` 상태를 선언하고 사람의 판단을 요청한다.
 - 상세 관계, 충돌 처리, 변경 승인·파괴적 작업·근거·추정·비밀 보호 규칙은 [`docs/harness/01-SSOT.md`](docs/harness/01-SSOT.md)를 따른다.
 - 검증 결과의 기준·판정·증거·실패 분류는 [`docs/harness/02-verification.md`](docs/harness/02-verification.md) §3~§9를 따른다.
-- 판정 이후의 반복·재검증·세션/에이전트 인계·사람 개입·종료는 [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §3~§8, §10을 따른다. 구현 전 문서의 초안·미결정 사항(§9)을 확인하고, 확정되지 않은 권장안을 새 규칙으로 추정하지 않는다.
+- 판정 이후의 반복·PR·CI·재검증·세션/에이전트 인계·사람 개입·종료는 [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §3~§9, §11을 따른다. 구현 전 문서의 초안·미결정 사항(§10)을 확인하고, 확정되지 않은 권장안을 새 규칙으로 추정하지 않는다.
 - 반복 절차의 권위·관계는 [`docs/harness/01-SSOT.md`](docs/harness/01-SSOT.md) §1~§2, §5~§6에서 확인한다.
 
 ## 작업별 검증·반복 절차
@@ -66,7 +66,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - 검증 계획과 기존 QA 체크리스트는 [`docs/07-plan.md`](docs/07-plan.md)를 참고한다. 새 검증 판정이나 반복 규칙의 근거로 사용하지 않는다.
 - 현재 상태·인계 참고는 [`docs/HANDOVER.md`](docs/HANDOVER.md)를 사용한다. 최신 검증 결과, Attempt 수, Loop State는 해당 문서에서 추정하지 않는다.
 - Issue의 최대 횟수·종료 조건·Issue별 테스트·범위는 해당 GitHub Issue를 따른다.
-- Issue가 `NEEDS_HUMAN`이거나 03-loop §9의 미결정 사항과 관련되면 사람의 결정 전 구현·예산 변경·대상 변경을 하지 않는다.
+- Issue가 `NEEDS_HUMAN`이거나 03-loop §10의 미결정 사항과 관련되면 사람의 결정 전 구현·예산 변경·대상 변경을 하지 않는다.
 - 검증 결과만으로 다음 구현을 자동 결정하지 않는다. `02-verification.md`의 판정과 `03-loop.md`의 절차를 모두 확인한다.
 - 실행 증거와 반복 상태가 없으면 과거 문서·대화·브랜치 이름으로 시도 횟수를 추정하지 않는다.
 

@@ -2,7 +2,7 @@ import type { Prisma } from '@/generated/prisma/client'
 import { db } from './db'
 import { applyMovement, reverseMovement } from './stock'
 import { MOVEMENT_TYPES, POPUP_STATUS, REASON_CODES } from './constants'
-import { dateOnly } from './date'
+import { dateOnly, today } from './date'
 
 /**
  * 팝업 = 여러 번 재고가 들어갔다가 마지막에 한 번 정산되는 임시 거점.
@@ -11,6 +11,11 @@ import { dateOnly } from './date'
  * 행사가 끝나고 남은 실물을 세어 `누적 반출 − 반입 = 차감`으로 판매량을 역산한다.
  * 정산 기준은 언제나 **누적 반출**이다. 1차 반출만 놓고 계산하면 판매량이 틀린다 (P7).
  */
+
+/** 종료일 당일까지 노출하고, 다음 날부터 진행 중 목록에서 제외한다. */
+export function isPopupExpired(endDate: Date, referenceDate: Date = today()): boolean {
+  return dateOnly(endDate) < dateOnly(referenceDate)
+}
 
 type MovementLike = {
   id: number

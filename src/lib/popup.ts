@@ -12,9 +12,9 @@ import { dateOnly, today } from './date'
  * 정산 기준은 언제나 **누적 반출**이다. 1차 반출만 놓고 계산하면 판매량이 틀린다 (P7).
  */
 
-/** 종료일 당일까지 노출하고, 다음 날부터 진행 중 목록에서 제외한다. */
-export function isPopupExpired(endDate: Date, referenceDate: Date = today()): boolean {
-  return dateOnly(endDate) < dateOnly(referenceDate)
+/** 종료일 당일까지 진행 중 목록에 노출한다. */
+export function isPopupVisible(endDate: Date, referenceDate: Date = today()): boolean {
+  return dateOnly(endDate) >= dateOnly(referenceDate)
 }
 
 type MovementLike = {

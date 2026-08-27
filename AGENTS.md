@@ -19,7 +19,10 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 | 재고 의미·업무 규칙·기능 범위·완료 기준 | [`docs/01-requirements.md`](docs/01-requirements.md) | 아키텍처·QA 문서 전체 |
 | 시스템 구조·기술 선택·데이터 흐름·구현 제약 | [`docs/06-architecture.md`](docs/06-architecture.md) | 요구사항·QA 문서 전체 |
 | 특정 작업의 범위·상태·완료 조건 | 해당 GitHub Issue | 모든 저장소 문서 |
-| 검증 계획·기존 QA 체크리스트 | [`docs/07-plan.md`](docs/07-plan.md) | 요구사항·아키텍처 전체 |
+| 검증 결과의 기준·판정·증거·실패 분류 | [`docs/harness/02-verification.md`](docs/harness/02-verification.md) §3~§9 | 판정 이후 반복 절차 |
+| 판정 이후 반복·재검증·인계·종료 | [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §3~§8, §10 | 검증 결과의 판정 기준 |
+| 반복 절차의 미결정 정책 확인 | [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §9 | 확정된 반복 규칙 |
+| 검증 계획·기존 QA 체크리스트 | [`docs/07-plan.md`](docs/07-plan.md) | 새 검증 판정·반복 절차 |
 | 현재 구현 상태·인계·미완료 작업 | [`docs/HANDOVER.md`](docs/HANDOVER.md) | 전체 기획 문서 |
 | 사용자 흐름·화면 행동·시나리오 | [`docs/03-scenarios.md`](docs/03-scenarios.md) | 아키텍처·운영 문서 전체 |
 | UI·인터랙션·반응형·접근성 | [`docs/05-design.md`](docs/05-design.md) | 도메인·운영 문서 전체 |
@@ -50,10 +53,30 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - 재고 도메인의 원본은 `docs/01-requirements.md`다.
 - 아키텍처의 원본은 `docs/06-architecture.md`다.
 - 개별 작업의 원본은 해당 GitHub Issue다.
-- `docs/07-plan.md`는 기존 검증 계획 참고 문서이며, 새 검증 규칙은 아직 없다.
+- `docs/07-plan.md`는 기존 검증 계획 참고 문서다.
 - `docs/HANDOVER.md`는 현재 상태·인계 참고 문서이며 요구사항이나 아키텍처를 자동으로 바꾸지 않는다.
 - 원본 간 충돌은 임의로 해소하지 않는다. `NEEDS_HUMAN` 상태를 선언하고 사람의 판단을 요청한다.
 - 상세 관계, 충돌 처리, 변경 승인·파괴적 작업·근거·추정·비밀 보호 규칙은 [`docs/harness/01-SSOT.md`](docs/harness/01-SSOT.md)를 따른다.
+- 검증 결과의 기준·판정·증거·실패 분류는 [`docs/harness/02-verification.md`](docs/harness/02-verification.md) §3~§9를 따른다.
+- 판정 이후의 반복·재검증·세션/에이전트 인계·사람 개입·종료는 [`docs/harness/03-loop.md`](docs/harness/03-loop.md) §3~§8, §10을 따른다. 구현 전 문서의 초안·미결정 사항(§9)을 확인하고, 확정되지 않은 권장안을 새 규칙으로 추정하지 않는다.
+- 반복 절차의 권위·관계는 [`docs/harness/01-SSOT.md`](docs/harness/01-SSOT.md) §1~§2, §5~§6에서 확인한다.
+
+## 작업별 검증·반복 절차
+
+- 검증 계획과 기존 QA 체크리스트는 [`docs/07-plan.md`](docs/07-plan.md)를 참고한다. 새 검증 판정이나 반복 규칙의 근거로 사용하지 않는다.
+- 현재 상태·인계 참고는 [`docs/HANDOVER.md`](docs/HANDOVER.md)를 사용한다. 최신 검증 결과, Attempt 수, Loop State는 해당 문서에서 추정하지 않는다.
+- Issue의 최대 횟수·종료 조건·Issue별 테스트·범위는 해당 GitHub Issue를 따른다.
+- Issue가 `NEEDS_HUMAN`이거나 03-loop §9의 미결정 사항과 관련되면 사람의 결정 전 구현·예산 변경·대상 변경을 하지 않는다.
+- 검증 결과만으로 다음 구현을 자동 결정하지 않는다. `02-verification.md`의 판정과 `03-loop.md`의 절차를 모두 확인한다.
+- 실행 증거와 반복 상태가 없으면 과거 문서·대화·브랜치 이름으로 시도 횟수를 추정하지 않는다.
+
+## 검증·구현 루프 상태
+
+- `docs/harness/02-verification.md`는 검증 판정 원본이고, `docs/harness/03-loop.md`는 현재 반복 절차 초안이다.
+- `03-loop.md`의 Attempt Ledger, 원자적 번호 예약, CI·Issue 연계는 아직 구현되지 않았다. 존재한다고 가정하지 않는다.
+- 기존 `docs/07-plan.md`와 `docs/HANDOVER.md`의 기록은 참고 또는 `HISTORICAL` 자료로만 취급한다.
+- `03-loop.md`를 정식 정책이나 자동화 규칙으로 승격·변경하려면 관련 원본과 GitHub Issue를 먼저 확인한다.
+- 검증 또는 구현 반복 규칙을 새로 만들거나 변경할 때는 `01-SSOT.md`의 승인·충돌·변경 관리 규칙을 따른다.
 
 ## 작업 시작·변경 규칙
 
@@ -64,14 +87,6 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - 사용자가 요청하지 않은 문서·코드·설정은 변경하지 않는다.
 - 파일을 수정하기 전 대상 파일을 읽고 주변의 문체·명명·구조를 따른다.
 - 파괴적 명령, 원격 변경, 커밋, 푸시는 사용자 요청 또는 명시적 승인 없이 실행하지 않는다.
-
-## 검증·구현 루프 상태
-
-검증 규칙과 표준 구현·검증 루프는 아직 정의되지 않았다. 둘 다 **미정(추후 생성)**으로 취급한다.
-
-- 존재하지 않는 검증 스크립트나 CI 절차를 있다고 가정하지 않는다.
-- 기존 `docs/07-plan.md`와 `docs/HANDOVER.md`의 기록은 참고만 한다.
-- 검증 규칙이나 구현·검증 루프를 새로 만들라는 요청이 있을 때만 설계·작성한다.
 
 ## Next.js 작업 주의
 

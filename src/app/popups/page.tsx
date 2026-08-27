@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Badge } from '@/components/StatusBadge'
-import { getPopupList, popupPeriod } from '@/lib/popup'
+import { getPopupList, isPopupExpired, popupPeriod } from '@/lib/popup'
 import { POPUP_STATUS, POPUP_STATUS_LABEL, type PopupStatus } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
@@ -14,7 +14,9 @@ const TONE: Record<PopupStatus, 'acc' | 'amber' | 'ok' | 'gray'> = {
 
 export default async function PopupsPage() {
   const popups = await getPopupList()
-  const running = popups.filter((p) => p.status !== POPUP_STATUS.CLOSED)
+  const running = popups.filter(
+    (p) => p.status !== POPUP_STATUS.CLOSED && !isPopupExpired(p.endDate)
+  )
   const closed = popups.filter((p) => p.status === POPUP_STATUS.CLOSED)
 
   return (
